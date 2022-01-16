@@ -5,6 +5,3 @@ The module is created with **HTML** and styled with **CSS**. The functionality l
 To check out the module:  
 1. Clone files from repository in to desired location.
 2. Open `index.html` with [LiveServer](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) in VSCode or similar.
-## To-Do
-- [x] Integrate the calendar into webinar module
-- [ ] Another task
