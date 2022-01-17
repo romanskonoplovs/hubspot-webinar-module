@@ -34,7 +34,6 @@ body {
   font-weight: 700;
   max-width: 1260px;
   margin: 5rem auto;
-  position: relative;
 }
 
 .webinar-card-control-container .webinar-card-controls {
@@ -71,7 +70,6 @@ body {
 /* ========================================================== */
 /* ------------- Card container and Webinar card ------------ */
 .webinar-card-container {
-  font-family: 'Roboto';
   max-width: 1260px;
   margin: 5rem auto;
   display: flex;
@@ -80,7 +78,6 @@ body {
   gap: 5%;
   align-items: center;
   justify-content: center;
-  transition: all 0.1s ease-in;
 }
 
 .webinar-card {
@@ -214,20 +211,27 @@ body {
 
 /* -------------The Calendar------------- */
 
-.calendar-box * {
+.quick-calendar-info-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.quick-calendar-info-container {
+  max-width: 1260px;
+  margin: 5rem auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 5%;
+  align-items: center;
+  justify-content: center;
 }
 
 .calendar-box {
   width: 245px;
   box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2);
   border-radius: 5px;
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  top: 0;
   background-color: white;
 }
 
@@ -321,4 +325,21 @@ button.button-previous, button.button-next {
 
 button.button-previous:hover, button.button-next:hover {
   color: #8BCAF0;
+}
+
+/* -------------Quick information------------- */
+
+.quick-event-info {
+  width: 735px;
+  height: 277px;
+  background-color: #006698;
+  box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2);
+}
+
+.event-info {
+  width: 100%;
+  height: 69px;
+  background-color: #001F54;
+  color: white;
+  padding: 0.4rem;
 }
