@@ -51,6 +51,10 @@ const dateRefactor = {
 
   getRefactoredDate(date, month, day, year) {
     return `${this.days[day]} ${date} of ${this.months[month]} ${year}`;
+  },
+
+  getCurrentYearMonthInfo(month, year) {
+    return `${this.months[month]} ${year}`;
   }
 };
 
@@ -78,7 +82,7 @@ function changeDate(dateString) {
 
 //===========================================================================
 //------------------------The Calendar Script--------------------------------
-displayMonthYearInfo(curentMonth, currentYear, monthYearInfo);
+monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
 for (let i = 1; i < monthStartDay; i++) {
   monthDays.appendChild(printEmptyCell());
@@ -110,7 +114,7 @@ previousButton.addEventListener('click', () => {
   const days = printDaysInMonth(curentMonth, currentYear);
   const monthStartDay = getWeekDay(curentMonth, currentYear);
 
-  displayMonthYearInfo(curentMonth, currentYear, monthYearInfo);
+  monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
   for (let i = 1; i < monthStartDay; i++) {
     monthDays.appendChild(printEmptyCell());
@@ -144,7 +148,7 @@ nextButton.addEventListener('click', () => {
   const days = printDaysInMonth(curentMonth, currentYear);
   const monthStartDay = getWeekDay(curentMonth, currentYear);
 
-  displayMonthYearInfo(curentMonth, currentYear, monthYearInfo);
+  monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
   for (let i = 1; i < monthStartDay; i++) {
     monthDays.appendChild(printEmptyCell());
@@ -178,9 +182,11 @@ cardControls.forEach(element => {
     hideShowTopics(e);
   });
 });
+//===========================================================================
+//------------------------------FUNCTIONS------------------------------------
 
+//--------------------------------Cards--------------------------------------
 // 1. Add active class 
-// 2. Hide and show cards by topic.
 function addActiveClass(e) {
   cardControlSwitches.forEach(element => {
     if (e.target.textContent === element.textContent) {
@@ -190,7 +196,7 @@ function addActiveClass(e) {
     }
   });
 }
-
+// 2. Hide and show cards by topic.
 function hideShowTopics(e) {
   webinarCards.forEach(element => {
     if (e.target.textContent === element.childNodes[1].textContent) {
@@ -202,8 +208,8 @@ function hideShowTopics(e) {
     }
   });
 }
-//===========================================================================
-//--------------------Functions fot the calendar-----------------------------
+
+//-------------------------------Calendar------------------------------------
 function createDayOfTheMonth(day) {
   const element = document.createElement('div');
   element.textContent = day;
@@ -244,24 +250,5 @@ function heighlightCurentDay(cells) {
       cell.classList.add('currentDate');
     }
   });
-}
-
-function displayMonthYearInfo(month, year, selector) {
-  const monthNames = {
-    0: 'January',
-    1: 'February',
-    2: 'March',
-    3: 'April',
-    4: 'May',
-    5: 'June',
-    6: 'July',
-    7: 'August',
-    8: 'September',
-    9: 'October',
-    10: 'November',
-    11: 'December'
-  };
-
-  selector.textContent = `${monthNames[month]} ${year}`;
 }
 //===========================================================================
