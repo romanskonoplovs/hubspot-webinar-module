@@ -224,15 +224,16 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 5%;
-  align-items: center;
+  /* align-items: center; */
   justify-content: center;
 }
 
 .calendar-box {
-  width: 245px;
-  box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2);
-  border-radius: 5px;
-  background-color: white;
+  width: 315px;
+  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
+  border-radius: 10px;
+  background: rgba(42, 42, 42, .8);
+  color: white;
 }
 
 .weekdays {
@@ -245,10 +246,9 @@ body {
   font-size: 10px;
   font-weight: 500;
   text-transform: uppercase;
-  width: 35px;
-  height: 30px;
+  width: 45px;
+  height: 40px;
   display: flex;
-  background-color: #8BCAF0;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -272,18 +272,18 @@ body {
 
 .monthdays .monthday {
   font-size: 12px;
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
   display: flex;
   text-align: center;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
+  border-radius: 50px;
   transition: all 0.1s ease-in;
 }
 
 .monthdays .monthday:hover {
-  background-color: #8BCAF0;
+  background: rgba(48, 48, 48, .5);
   cursor: pointer;
 }
 
@@ -292,14 +292,15 @@ body {
 } */
 
 .emptyCell {
-  width: 35px;
-  height: 35px;
+  width: 45px;
+  height: 45px;
   display: flex;
   border-radius: 5px;
 }
 
 .currentDate {
   background-color: #8BCAF0;
+  color: black;
 }
 
 .manual-switches {
@@ -307,7 +308,11 @@ body {
   justify-content: space-between;
   align-items: center;
   text-align: center;
-  margin-bottom: 5px;
+  height: 50px;
+  padding: 0px 5px;
+  background: rgb(55, 55, 55);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .month-year-info {
   font-size: 12px;
@@ -331,9 +336,9 @@ button.button-previous:hover, button.button-next:hover {
 
 .quick-event-info {
   width: 735px;
-  height: 277px;
+  height: 100%;
   background-color: #006698;
-  box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2);
+  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
 }
 
 .event-info {
