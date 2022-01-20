@@ -337,14 +337,13 @@ button.button-previous:hover, button.button-next:hover {
 .quick-event-info {
   width: 735px;
   height: 100%;
-  background-color: #006698;
   /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
 }
 
-.event-info {
+.event-info-card {
   width: 100%;
-  height: 69px;
   background-color: #001F54;
   color: white;
-  padding: 0.4rem;
+  padding: 1rem;
+  border-radius: 10px;
 }

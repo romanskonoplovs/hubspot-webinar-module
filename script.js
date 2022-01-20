@@ -4,6 +4,8 @@ const monthDays = document.querySelector('.monthdays');
 const monthYearInfo = document.querySelector('.month-year-info');
 const previousButton = document.querySelector('.button-previous');
 const nextButton = document.querySelector('.button-next');
+// Selecting quick-event-info section.
+const quickEventInfoSection = document.querySelector('.quick-event-info');
 // Selecting webinar card controls
 const cardControls = document.querySelectorAll('ul.webinar-card-controls');
 const cardControlSwitches = document.querySelectorAll('ul.webinar-card-controls li');
@@ -24,16 +26,6 @@ const days = printDaysInMonth(curentMonth, currentYear);
 const monthStartDay = getWeekDay(curentMonth, currentYear);
 
 const dateRefactor = {
-  days: {
-    0: 'Sunday',
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wednesday',
-    4: 'Thursday',
-    5: 'Friday',
-    6: 'Saturday'
-  },
-
   months: {
     0: 'January',
     1: 'February',
@@ -50,16 +42,14 @@ const dateRefactor = {
   },
 
   getRefactoredDate(date, month, day, year) {
-    return `${this.days[day]} ${date} of ${this.months[month]} ${year}`;
+    return `${this.months[month]} ${date}, ${year}`;
   },
 
   getCurrentYearMonthInfo(month, year) {
     return `${this.months[month]} ${year}`;
   }
 };
-
 //=======================================================================================
-
 //-----Changing text content of the "link button" in webinar cards based on the date.----
 webinarCardContent.forEach(cardContent => {
   let arrayWithCardContent = Array.prototype.slice.call(cardContent.children);
@@ -184,6 +174,12 @@ cardControls.forEach(element => {
 });
 //===========================================================================
 //------------------------------FUNCTIONS------------------------------------
+
+//--------------------------Event info section-------------------------------
+function createQuickEventCard(header, title, date, time) {
+  const eventInfoCard = document.createElement('div');
+  eventInfoCard.className = '.event-info-card';
+}
 
 //--------------------------------Cards--------------------------------------
 // 1. Add active class 
