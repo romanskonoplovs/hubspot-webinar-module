@@ -25,6 +25,8 @@ let currentYear = currentDate.getFullYear();
 const days = printDaysInMonth(curentMonth, currentYear);
 const monthStartDay = getWeekDay(curentMonth, currentYear);
 
+let cardHeader, cardTitle, cardDate, cardTime;
+
 const dateRefactor = {
   months: {
     0: 'January',
@@ -51,24 +53,34 @@ const dateRefactor = {
 };
 //=======================================================================================
 //-----Changing text content of the "link button" in webinar cards based on the date.----
-webinarCardContent.forEach(cardContent => {
-  let arrayWithCardContent = Array.prototype.slice.call(cardContent.children);
-  arrayWithCardContent.forEach(childElement => {
-    if (childElement.classList.contains('date')) {
-      changeDate(childElement.textContent.replaceAll('-', '/'));
-      childElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
-    }
-    if (childElement.classList.contains('link-to-webinar') && date.getTime() >= tempDate.getTime()) {
-      childElement.textContent = 'Watch';
-    } else if (childElement.classList.contains('link-to-webinar') && date.getTime() < tempDate.getTime()) {
-      childElement.textContent = 'Register';
-    }
-  });
-});
+//----Searching upcoming webinar cards and rendering them to top quick info section.----
+webinarCards.forEach(card => {
+  for (let i = 0; i < card.children.length; i++) {
+    if (card.children[i].classList.contains('webinar-card-content')) {
+      for (let j = 0; j < card.children[i].children.length; j++) {
 
-function changeDate(dateString) {
-  tempDate = new Date(dateString);
-}
+        let contentElement = card.children[i].children[j];
+
+        if (contentElement.classList.contains('date')) {
+          console.log(contentElement);
+          changeDate(contentElement.textContent.replaceAll('-', '/'));
+          contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
+
+          if (tempDate.getTime() >= date.getTime()) {
+            console.log(card);
+          }
+        }
+
+        if (contentElement.classList.contains('link-to-webinar') && date.getTime() >= tempDate.getTime()) {
+          contentElement.textContent = 'Watch';
+        } else if (contentElement.classList.contains('link-to-webinar') && date.getTime() < tempDate.getTime()) {
+          contentElement.textContent = 'Register';
+        }
+
+      }
+    }
+  }
+});
 
 //===========================================================================
 //------------------------The Calendar Script--------------------------------
@@ -203,6 +215,10 @@ function hideShowTopics(e) {
       element.classList.add('hidden');
     }
   });
+}
+// 3. Change temporary date.
+function changeDate(dateString) {
+  tempDate = new Date(dateString);
 }
 
 //-------------------------------Calendar------------------------------------
