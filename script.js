@@ -62,12 +62,11 @@ webinarCards.forEach(card => {
         let contentElement = card.children[i].children[j];
 
         if (contentElement.classList.contains('date')) {
-          console.log(contentElement);
           changeDate(contentElement.textContent.replaceAll('-', '/'));
-          contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
+          contentElement.children[0].textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
 
           if (tempDate.getTime() >= date.getTime()) {
-            console.log(card);
+            createQuickEventCard(card);
           }
         }
 
@@ -188,9 +187,69 @@ cardControls.forEach(element => {
 //------------------------------FUNCTIONS------------------------------------
 
 //--------------------------Event info section-------------------------------
-function createQuickEventCard(header, title, date, time) {
-  const eventInfoCard = document.createElement('div');
-  eventInfoCard.className = '.event-info-card';
+function createQuickEventCard(webinarCard) {
+
+  let cardHeader, cardTitle, cardDate, cardTime;
+
+  for (let i = 0; i < webinarCard.children.length; i++) {
+    if (webinarCard.children[i].classList.contains('webinar-card-header')) {
+      cardHeader = webinarCard.children[i].textContent;
+    }
+
+    if (webinarCard.children[i].classList.contains('webinar-card-content')) {
+      for (let j = 0; j < webinarCard.children[i].children.length; j++) {
+
+        let webinarCardContent = webinarCard.children[i].children[j];
+
+        if (webinarCardContent.classList.contains('webinarTitle')) {
+          cardTitle = webinarCardContent.textContent;
+        }
+
+        if (webinarCardContent.classList.contains('date')) {
+          cardDate = webinarCardContent.textContent;
+        }
+
+        if (webinarCardContent.classList.contains('time')) {
+          cardTime = webinarCardContent.textContent;
+        }
+
+      }
+    }
+  }
+
+  cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
+
+}
+
+function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
+  const webinarInfoCard = document.createElement('a');
+  webinarInfoCard.className = 'event-info-card';
+  webinarInfoCard.href = 'https://google.com';
+  webinarInfoCard.target = '_blank';
+
+  if (cardHeader === 'Finance & Operations') {
+    webinarInfoCard.classList.add('finance-and-operations');
+  } else if (cardHeader === 'Business Central') {
+    webinarInfoCard.classList.add('business-central');
+  }
+
+  const webinarHeader = document.createElement('h4');
+  webinarHeader.textContent = cardHeader;
+
+  const webinarTitle = document.createElement('h5');
+  webinarTitle.textContent = cardTitle;
+
+  const webinarDate = document.createElement('p');
+  webinarDate.className = 'date';
+  webinarDate.textContent = cardDate;
+
+  const webinarTime = document.createElement('p');
+  webinarTime.className = 'time';
+  webinarTime.textContent = cardTime;
+
+  webinarInfoCard.append(webinarHeader, webinarTitle, webinarDate, webinarTime);
+
+  quickEventInfoSection.appendChild(webinarInfoCard);
 }
 
 //--------------------------------Cards--------------------------------------

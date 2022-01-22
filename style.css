@@ -86,7 +86,8 @@ body {
   height: 450px;
   margin: 2rem 0;
   border-radius: 4px;
-  box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2);
+  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
+  box-shadow: 2px 2px 8px 1px rgba(00,00,00,0.2);
 }
 /* ---------------------------------------------------------- */
 /* ========================================================== */
@@ -98,11 +99,18 @@ body {
   height: 50px;
   border-radius: 4px 4px 0px 0px;
   color: white;
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
   font-weight: 900;
+  position: relative;
+}
+
+.webinar-card-header span {
+  display: block;
+  margin: auto;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .business-central {
@@ -117,8 +125,7 @@ body {
 .webinar-card-content {
   width: 100%;
   padding: 30px;
-  display: flex;
-  flex-direction: column;
+  display: block;
 }
 
 .webinar-card-content h4 {
@@ -144,18 +151,24 @@ body {
 }
 
 .webinar-card-content ul li {
-  display: flex;
+  display: block;
   margin: 10px 0px;
+  position: relative;
 }
 
 .webinar-card-content ul li img {
   width: 20px;
   margin-right: 10px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(0, -50%);
 }
 
 .webinar-card-content ul li p {
-  display: inline-block;
+  display: block;
   font-size: 14px;
+  margin-left: 25px;
 }
 
 
@@ -337,12 +350,27 @@ button.button-previous:hover, button.button-next:hover {
 .quick-event-info {
   width: 735px;
   height: 100%;
-  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
 }
 
-.event-info-card {
+a.event-info-card {
+  display: block;
+  text-decoration: none;
   width: 100%;
   color: white;
   padding: 1rem;
   border-radius: 10px;
+  margin-bottom: 10px;
+  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
+  transition: all 0.2s ease-out;
+}
+
+a.event-info-card:hover {
+  box-shadow: 2px 2px 8px 1px rgba(00,00,00,0.2);
+}
+
+/* -------------Media Queries------------- */
+@media screen and (max-width: 1025px) {
+  .calendar-box {
+    display: none;
+  }
 }
