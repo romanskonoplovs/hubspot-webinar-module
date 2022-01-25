@@ -54,7 +54,7 @@ const dateRefactor = {
 //=======================================================================================
 //-----Changing text content of the "link button" in webinar cards based on the date.----
 //----Searching upcoming webinar cards and rendering them to top quick info section.----
-webinarCards.forEach(card => {
+webinarCards.forEach((card, index) => {
   for (let i = 0; i < card.children.length; i++) {
     if (card.children[i].classList.contains('webinar-card-content')) {
       for (let j = 0; j < card.children[i].children.length; j++) {
@@ -63,9 +63,9 @@ webinarCards.forEach(card => {
 
         if (contentElement.classList.contains('date')) {
           changeDate(contentElement.textContent.replaceAll('-', '/'));
-          contentElement.children[0].textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
+          contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
 
-          if (tempDate.getTime() >= date.getTime()) {
+          if (index < 3) {
             createQuickEventCard(card);
           }
         }
