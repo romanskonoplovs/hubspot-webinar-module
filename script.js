@@ -13,6 +13,9 @@ const cardControlSwitches = document.querySelectorAll('ul.webinar-card-controls 
 // Selecting all webinar cards
 const webinarCards = document.querySelectorAll('.webinar-card-container .webinar-card');
 const webinarCardContent = document.querySelectorAll('.webinar-card-container .webinar-card .webinar-card-content');
+
+// Selecting calendar box
+const calendarBox = document.querySelector('.calendar-box');
 //============================================================================
 
 //--------------------------------Variables and Objects----------------------------------
@@ -43,33 +46,64 @@ const dateRefactor = {
     11: 'December'
   },
 
-  getRefactoredDate(date, month, day, year) {
+  getRefactoredDate(date, month, year) {
     return `${this.months[month]} ${date}, ${year}`;
   },
 
   getCurrentYearMonthInfo(month, year) {
     return `${this.months[month]} ${year}`;
+  },
+
+  getRefactoredDateFromCalendar(dateString) {
+    let date, month, year;
+    const dateArray = dateString.split(" ");
+    dateArray.forEach(arrayElement => {
+      if (arrayElement.length <= 2) {
+        date = arrayElement;
+      }
+
+      if (arrayElement.length <= 4) {
+        year = arrayElement;
+      }
+
+      if (/^[A-Za-z\s]*$/.test(arrayElement)) {
+        month = arrayElement;
+      }
+    });
+
+    console.log(`${month} ${date}, ${year}`);
+    return `${month} ${date}, ${year}`;
   }
 };
 //=======================================================================================
 //-----Changing text content of the "link button" in webinar cards based on the date.----
 //----Searching upcoming webinar cards and rendering them to top quick info section.----
 webinarCards.forEach((card, index) => {
+  // Extracting date information from card by looping through its children.
   for (let i = 0; i < card.children.length; i++) {
     if (card.children[i].classList.contains('webinar-card-content')) {
+      // And Children children :D
       for (let j = 0; j < card.children[i].children.length; j++) {
-
+        // For a better understandig we are assigning childs child to variable each eteration.
+        // The reason it is called contentElement is because we are searching for particular content in element.
         let contentElement = card.children[i].children[j];
-
+        // Checking if any element has a class of 'date'.
         if (contentElement.classList.contains('date')) {
+          // Pasing to changeDate function text content of date and replacing all '-' with '/'
+          // The reason for replacing is that HubSpot has its dates in 31-12-2021 format
+          // but for Date object we need 31/12/2021 date format.
+          // 'changeDate()' function changes the 'tempDate' object
           changeDate(contentElement.textContent.replaceAll('-', '/'));
-          contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getDay(), tempDate.getFullYear());
+          // Then we pass 'tempDate' to 'dateRefactor' object to get nice readable date.
+          contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getFullYear());
 
+          // Here we are creating eventCard for side panel next to calendar based on 3 recent events/webinars.
           if (index < 3) {
             createQuickEventCard(card);
           }
         }
 
+        // Changing link text between "Watch" and "Register" based on date.
         if (contentElement.classList.contains('link-to-webinar') && date.getTime() >= tempDate.getTime()) {
           contentElement.textContent = 'Watch';
         } else if (contentElement.classList.contains('link-to-webinar') && date.getTime() < tempDate.getTime()) {
@@ -164,6 +198,20 @@ nextButton.addEventListener('click', () => {
   }
 });
 
+
+calendarBox.addEventListener('click', e => {
+  for (let i = 0; i < calendarBox.children.length; i++) {
+    let calendarBoxChild = calendarBox.children[i];
+    if (calendarBoxChild.classList.contains('manual-switches')) {
+      for (let j = 0; j < calendarBoxChild.children.length; j++) {
+        let calendarBoxSwitch = calendarBoxChild.children[j];
+        if (calendarBoxSwitch.classList.contains('month-year-info')) {
+          dateRefactor.getRefactoredDateFromCalendar(`${e.target.textContent} ${calendarBoxSwitch.textContent}`);
+        }
+      }
+    }
+  }
+});
 //===========================================================================
 //-------------Adding correct class to paint webinar cards headings.---------
 webinarCards.forEach(element => {
