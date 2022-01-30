@@ -29,6 +29,7 @@ const days = printDaysInMonth(curentMonth, currentYear);
 const monthStartDay = getWeekDay(curentMonth, currentYear);
 
 let cardHeader, cardTitle, cardDate, cardTime;
+const quickInfoCards = [];
 
 const dateRefactor = {
   months: {
@@ -76,34 +77,51 @@ const dateRefactor = {
   }
 };
 //=======================================================================================
-//-----Changing text content of the "link button" in webinar cards based on the date.----
-//----Searching upcoming webinar cards and rendering them to top quick info section.----
+//--Refactoring date and extracting header, title, date and time for quick event cards.--
+//--Header, title, date and time will be part of cardObject which later we will append---
+//--to quickInfoCards array for quicker and easier data monipulation.--------------------
 webinarCards.forEach((card, index) => {
-  // Extracting date information from card by looping through its children.
+  //Creating cardObject where we are going to store header, title, date and time data
+  let cardObject = new Object();
+  //Extracting information from card by looping through its children.
   for (let i = 0; i < card.children.length; i++) {
+
+    if (card.children[i].classList.contains('webinar-card-header')) {
+      //Creating new property in cardObject and assigning to it data from card
+      cardObject.header = card.children[i].textContent;
+    }
+
     if (card.children[i].classList.contains('webinar-card-content')) {
-      // And Children children :D
+
       for (let j = 0; j < card.children[i].children.length; j++) {
         // For a better understandig we are assigning childs child to variable each eteration.
-        // The reason it is called contentElement is because we are searching for particular content in element.
         let contentElement = card.children[i].children[j];
+
+        if (contentElement.classList.contains('webinarTitle')) {
+          //Creating new property in cardObject and assigning to it data from card
+          cardObject.title = contentElement.textContent;
+        }
+
         // Checking if any element has a class of 'date'.
         if (contentElement.classList.contains('date')) {
-          // Pasing to changeDate function text content of date and replacing all '-' with '/'
+          // Pasing to changeDate function text content of date and replacing all '-' with '/'.
           // The reason for replacing is that HubSpot has its dates in 31-12-2021 format
           // but for Date object we need 31/12/2021 date format.
-          // 'changeDate()' function changes the 'tempDate' object
+          // 'changeDate()' function changes the 'tempDate' object.
           changeDate(contentElement.textContent.replaceAll('-', '/'));
           // Then we pass 'tempDate' to 'dateRefactor' object to get nice readable date.
           contentElement.textContent = dateRefactor.getRefactoredDate(tempDate.getDate(), tempDate.getMonth(), tempDate.getFullYear());
-
+          //--Creating new property in cardObject and assigning to it data from card.
+          cardObject.date = contentElement.textContent;
           // Here we are creating eventCard for side panel next to calendar based on 3 recent events/webinars.
-          if (index < 3) {
-            createQuickEventCard(card);
-          }
         }
 
-        // Changing link text between "Watch" and "Register" based on date.
+        if (contentElement.classList.contains('time')) {
+          //Creating new property in cardObject and assigning to it data from card.
+          cardObject.time = contentElement.textContent;
+        }
+
+        //Changing link text between "Watch" and "Register" based on date.
         if (contentElement.classList.contains('link-to-webinar') && date.getTime() >= tempDate.getTime()) {
           contentElement.textContent = 'Watch';
         } else if (contentElement.classList.contains('link-to-webinar') && date.getTime() < tempDate.getTime()) {
@@ -111,9 +129,24 @@ webinarCards.forEach((card, index) => {
         }
 
       }
+
     }
+
   }
+  //--When all information is gathered, we are pushing cardObject to quickInforCard array.
+  quickInfoCards.push(cardObject);
 });
+
+for (let i = 0; i < 3; i++) {
+  let cardHeader = quickInfoCards[i].header;
+  let cardTitle = quickInfoCards[i].title;
+  let cardDate = quickInfoCards[i].date;
+  let cardTime = quickInfoCards[i].time;
+  cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
+}
+
+
+console.log(quickInfoCards[0].cardTitle);
 
 //===========================================================================
 //------------------------The Calendar Script--------------------------------
@@ -235,40 +268,6 @@ cardControls.forEach(element => {
 //------------------------------FUNCTIONS------------------------------------
 
 //--------------------------Event info section-------------------------------
-function createQuickEventCard(webinarCard) {
-
-  let cardHeader, cardTitle, cardDate, cardTime;
-
-  for (let i = 0; i < webinarCard.children.length; i++) {
-    if (webinarCard.children[i].classList.contains('webinar-card-header')) {
-      cardHeader = webinarCard.children[i].textContent;
-    }
-
-    if (webinarCard.children[i].classList.contains('webinar-card-content')) {
-      for (let j = 0; j < webinarCard.children[i].children.length; j++) {
-
-        let webinarCardContent = webinarCard.children[i].children[j];
-
-        if (webinarCardContent.classList.contains('webinarTitle')) {
-          cardTitle = webinarCardContent.textContent;
-        }
-
-        if (webinarCardContent.classList.contains('date')) {
-          cardDate = webinarCardContent.textContent;
-        }
-
-        if (webinarCardContent.classList.contains('time')) {
-          cardTime = webinarCardContent.textContent;
-        }
-
-      }
-    }
-  }
-
-  cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
-
-}
-
 function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
   const webinarInfoCard = document.createElement('a');
   webinarInfoCard.className = 'event-info-card';
