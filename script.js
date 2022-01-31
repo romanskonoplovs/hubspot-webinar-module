@@ -72,7 +72,6 @@ const dateRefactor = {
       }
     });
 
-    console.log(`${month} ${date}, ${year}`);
     return `${month} ${date}, ${year}`;
   }
 };
@@ -137,6 +136,7 @@ webinarCards.forEach((card, index) => {
   quickInfoCards.push(cardObject);
 });
 
+//Creating 3 most recent event cards for side panel
 for (let i = 0; i < 3; i++) {
   let cardHeader = quickInfoCards[i].header;
   let cardTitle = quickInfoCards[i].title;
@@ -145,32 +145,24 @@ for (let i = 0; i < 3; i++) {
   cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
 }
 
-
-console.log(quickInfoCards[0].cardTitle);
-
 //===========================================================================
 //------------------------The Calendar Script--------------------------------
 monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
-for (let i = 1; i < monthStartDay; i++) {
-  monthDays.appendChild(printEmptyCell());
-}
-for (let i = 0; i < days.length; i++) {
-  monthDays.appendChild(createDayOfTheMonth(days[i]));
-}
+renderDaysOfTheMonth(monthStartDay, days);
 
 let calendarCells = document.querySelectorAll('.monthday');
 heighlightCurentDay(calendarCells);
 
+let monthAndYearInfo = document.querySelector('.month-year-info');
+highlightingEventsInTheCalendar(calendarCells, monthAndYearInfo);
+
 previousButton.addEventListener('click', () => {
-  let monthDaysToReset = document.querySelectorAll('.monthday');
+
   let monthEmptyCellsToReset = document.querySelectorAll('.emptyCell');
-  monthEmptyCellsToReset.forEach(empty => {
-    empty.remove();
-  });
-  monthDaysToReset.forEach(day => {
-    day.remove();
-  });
+  let monthDaysToReset = document.querySelectorAll('.monthday');
+
+  monthDaysReset(monthEmptyCellsToReset, monthDaysToReset);
 
   if (curentMonth > 0) {
     curentMonth = curentMonth - 1;
@@ -184,28 +176,23 @@ previousButton.addEventListener('click', () => {
 
   monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
-  for (let i = 1; i < monthStartDay; i++) {
-    monthDays.appendChild(printEmptyCell());
-  }
-  for (let i = 0; i < days.length; i++) {
-    monthDays.appendChild(createDayOfTheMonth(days[i]));
-  }
+  renderDaysOfTheMonth(monthStartDay, days);
+
+  calendarCells = document.querySelectorAll('.monthday');
+  monthAndYearInfo = document.querySelector('.month-year-info');
+  highlightingEventsInTheCalendar(calendarCells, monthAndYearInfo);
 
   if (curentMonth === date.getMonth()) {
-    calendarCells = document.querySelectorAll('.monthday');
     heighlightCurentDay(calendarCells);
   }
 });
 
 nextButton.addEventListener('click', () => {
-  let monthDaysToReset = document.querySelectorAll('.monthday');
+
   let monthEmptyCellsToReset = document.querySelectorAll('.emptyCell');
-  monthEmptyCellsToReset.forEach(empty => {
-    empty.remove();
-  });
-  monthDaysToReset.forEach(day => {
-    day.remove();
-  });
+  let monthDaysToReset = document.querySelectorAll('.monthday');
+
+  monthDaysReset(monthEmptyCellsToReset, monthDaysToReset);
 
   if (curentMonth < 11) {
     curentMonth = curentMonth + 1;
@@ -218,32 +205,29 @@ nextButton.addEventListener('click', () => {
 
   monthYearInfo.textContent = dateRefactor.getCurrentYearMonthInfo(curentMonth, currentYear);
 
-  for (let i = 1; i < monthStartDay; i++) {
-    monthDays.appendChild(printEmptyCell());
-  }
-  for (let i = 0; i < days.length; i++) {
-    monthDays.appendChild(createDayOfTheMonth(days[i]));
-  }
+  renderDaysOfTheMonth(monthStartDay, days);
+
+  calendarCells = document.querySelectorAll('.monthday');
+  monthAndYearInfo = document.querySelector('.month-year-info');
+  highlightingEventsInTheCalendar(calendarCells, monthAndYearInfo);
 
   if (curentMonth === date.getMonth()) {
-    calendarCells = document.querySelectorAll('.monthday');
     heighlightCurentDay(calendarCells);
   }
 });
 
 
 calendarBox.addEventListener('click', e => {
-  for (let i = 0; i < calendarBox.children.length; i++) {
-    let calendarBoxChild = calendarBox.children[i];
-    if (calendarBoxChild.classList.contains('manual-switches')) {
-      for (let j = 0; j < calendarBoxChild.children.length; j++) {
-        let calendarBoxSwitch = calendarBoxChild.children[j];
-        if (calendarBoxSwitch.classList.contains('month-year-info')) {
-          dateRefactor.getRefactoredDateFromCalendar(`${e.target.textContent} ${calendarBoxSwitch.textContent}`);
-        }
-      }
+  let refactoredDateOnClick = dateRefactor.getRefactoredDateFromCalendar(`${e.target.textContent} ${monthAndYearInfo.textContent}`);
+  quickInfoCards.forEach(card => {
+    if (refactoredDateOnClick === card.date) {
+      let allCardsOnSidePanel = document.querySelectorAll('a.event-info-card');
+      allCardsOnSidePanel.forEach(sidePanelCard => {
+        sidePanelCard.remove();
+      });
+      cardBuilder(card.header, card.title, card.date, card.time);
     }
-  }
+  });
 });
 //===========================================================================
 //-------------Adding correct class to paint webinar cards headings.---------
@@ -367,6 +351,43 @@ function heighlightCurentDay(cells) {
     if (parseInt(cell.textContent) === date.getDate()) {
       cell.classList.add('currentDate');
     }
+  });
+}
+
+function renderDaysOfTheMonth(monthStartDay, days) {
+  for (let i = 1; i < monthStartDay; i++) {
+    monthDays.appendChild(printEmptyCell());
+  }
+  for (let i = 0; i < days.length; i++) {
+    monthDays.appendChild(createDayOfTheMonth(days[i]));
+  }
+}
+
+function monthDaysReset(monthEmptyCells, monthDays) {
+  monthEmptyCells.forEach(empty => {
+    empty.remove();
+  });
+  monthDays.forEach(day => {
+    day.remove();
+  });
+}
+
+function highlightingEventsInTheCalendar(daysCells, monthYearInfo) {
+  daysCells.forEach(cell => {
+    let cellDateRefactored = dateRefactor.getRefactoredDateFromCalendar(`${cell.textContent} ${monthYearInfo.textContent}`);
+    quickInfoCards.forEach(card => {
+      if (cellDateRefactored === card.date) {
+
+        if (card.header === 'Finance & Operations') {
+          cell.classList.add('finance-and-operations');
+        }
+
+        if (card.header === 'Business Central') {
+          cell.classList.add('business-central');
+        }
+
+      }
+    });
   });
 }
 //===========================================================================
