@@ -1,13 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 /* ------------------------ Resets ------------------------ */
-.webinar-card-control-container * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.webinar-card-container * {
+.webinar-card-control-container *, .webinar-card-container * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -25,6 +19,20 @@ body {
 
 .hidden {
   display: none;
+}
+
+.business-central-border {
+  border: 3px solid #008290;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.finance-and-operations-border {
+  border: 3px solid #006698;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 /* ---------------------------------------------------------- */
 /* ========================================================== */
@@ -252,11 +260,12 @@ body {
   flex-wrap: wrap;
   gap: 5%;
   /* align-items: center; */
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .calendar-box {
   width: 315px;
+  height: max-content;
   /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
   border-radius: 10px;
   background: rgba(42, 42, 42, .8);
@@ -376,31 +385,111 @@ button.button-previous:hover, button.button-next:hover {
 }
 
 /* -------------Quick information------------- */
-
 .quick-event-info {
-  width: 735px;
-  height: 100%;
+  max-height: 365px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
 }
 
-a.event-info-card {
-  display: block;
-  text-decoration: none;
-  width: 100%;
-  color: white;
-  padding: 1rem;
+.side-info-card {
+  position: relative;
+  font-family: 'Roboto';
+  max-width: 500px;
   border-radius: 10px;
+  transition: all 0.2s ease-in;
+  animation:  opacity-apperance 0.4s ease-in;
   margin-bottom: 10px;
-  /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
-  transition: all 0.2s ease-out;
+  margin-right: 15px;
 }
 
-a.event-info-card:hover {
-  box-shadow: 2px 2px 8px 1px rgba(00,00,00,0.2);
+.side-info-card:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 4px 4px;
+}
+
+.side-info-card-header {
+  position: relative;
+  width: 100%;
+  height: 2rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.side-info-card-header > h4 {
+  color: white;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+}
+
+.side-info-card-content {
+  padding: 1rem;
+}
+
+.side-info-card-content > h4 {
+
+}
+
+.registration-link {
+  width: 27px;
+  height: 27px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.registration-link > a > img {
+  border-radius: 50%;
+  transition: all 0.2s ease-in;
+}
+.registration-link > a > img:hover {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 4px 4px;
+  transform: translateY(-2px);
+}
+
+@keyframes opacity-apperance {
+  0% {
+    transform: translateX(300px);
+    opacity: 0;
+  }
+
+  25% {
+    transform: translateX(225px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* -------------Media Queries------------- */
 @media screen and (max-width: 1025px) {
+  .webinar-card {
+    
+  }
+  .quick-calendar-info-container {
+    margin: 2rem auto;
+  }
+
   .calendar-box {
     display: none;
+  }
+
+  .quick-event-info {
+    max-height: fit-content;
+    overflow: hidden;
+  }
+
+  .side-info-card {
+    width: 90%;
+    margin: 10px auto;
   }
 }

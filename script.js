@@ -137,13 +137,7 @@ webinarCards.forEach((card, index) => {
 });
 
 //Creating 3 most recent event cards for side panel
-for (let i = 0; i < 3; i++) {
-  let cardHeader = quickInfoCards[i].header;
-  let cardTitle = quickInfoCards[i].title;
-  let cardDate = quickInfoCards[i].date;
-  let cardTime = quickInfoCards[i].time;
-  cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
-}
+renderFirstFewCards(3);
 
 //===========================================================================
 //------------------------The Calendar Script--------------------------------
@@ -218,10 +212,18 @@ nextButton.addEventListener('click', () => {
 
 
 calendarBox.addEventListener('click', e => {
+  if (!e.target.classList.contains('business-central') || !e.target.classList.contains('finance-and-operations')) {
+    let allCardsOnSidePanel = document.querySelectorAll('div .side-info-card');
+    allCardsOnSidePanel.forEach(sidePanelCard => {
+      sidePanelCard.remove();
+    });
+    renderFirstFewCards(3);
+  }
+
   let refactoredDateOnClick = dateRefactor.getRefactoredDateFromCalendar(`${e.target.textContent} ${monthAndYearInfo.textContent}`);
   quickInfoCards.forEach(card => {
     if (refactoredDateOnClick === card.date) {
-      let allCardsOnSidePanel = document.querySelectorAll('a.event-info-card');
+      let allCardsOnSidePanel = document.querySelectorAll('div .side-info-card');
       allCardsOnSidePanel.forEach(sidePanelCard => {
         sidePanelCard.remove();
       });
@@ -253,19 +255,20 @@ cardControls.forEach(element => {
 
 //--------------------------Event info section-------------------------------
 function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
-  const webinarInfoCard = document.createElement('a');
-  webinarInfoCard.className = 'event-info-card';
-  webinarInfoCard.href = 'https://google.com';
-  webinarInfoCard.target = '_blank';
-
-  if (cardHeader === 'Finance & Operations') {
-    webinarInfoCard.classList.add('finance-and-operations');
-  } else if (cardHeader === 'Business Central') {
-    webinarInfoCard.classList.add('business-central');
-  }
+  const webinarInfoCard = document.createElement('div');
+  webinarInfoCard.className = 'side-info-card';
+  //Creating Header in "side info card".
+  const webinarInfoCardHeader = document.createElement('div');
+  webinarInfoCardHeader.className = 'side-info-card-header';
 
   const webinarHeader = document.createElement('h4');
   webinarHeader.textContent = cardHeader;
+
+  webinarInfoCardHeader.append(webinarHeader);
+
+  //Creating Content area in "side info card".
+  const webinarInfoCardContent = document.createElement('div');
+  webinarInfoCardContent.classList = 'side-info-card-content';
 
   const webinarTitle = document.createElement('h5');
   webinarTitle.textContent = cardTitle;
@@ -278,9 +281,29 @@ function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
   webinarTime.className = 'time';
   webinarTime.textContent = cardTime;
 
-  webinarInfoCard.append(webinarHeader, webinarTitle, webinarDate, webinarTime);
+  if (cardHeader === 'Finance & Operations') {
+    webinarInfoCardHeader.classList.add('finance-and-operations');
+    webinarInfoCardContent.classList.add('finance-and-operations-border');
+  } else if (cardHeader === 'Business Central') {
+    webinarInfoCardHeader.classList.add('business-central');
+    webinarInfoCardContent.classList.add('business-central-border');
+  }
+
+  webinarInfoCardContent.append(webinarTitle, webinarDate, webinarTime);
+
+  webinarInfoCard.append(webinarInfoCardHeader, webinarInfoCardContent);
 
   quickEventInfoSection.appendChild(webinarInfoCard);
+}
+
+function renderFirstFewCards(numberOfCardsToRender) {
+  for (let i = 0; i < numberOfCardsToRender; i++) {
+    let cardHeader = quickInfoCards[i].header;
+    let cardTitle = quickInfoCards[i].title;
+    let cardDate = quickInfoCards[i].date;
+    let cardTime = quickInfoCards[i].time;
+    cardBuilder(cardHeader, cardTitle, cardDate, cardTime);
+  }
 }
 
 //--------------------------------Cards--------------------------------------
