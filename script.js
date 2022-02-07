@@ -120,6 +120,10 @@ webinarCards.forEach((card, index) => {
           cardObject.time = contentElement.textContent;
         }
 
+        if (contentElement.classList.contains('link-to-webinar')) {
+          cardObject.link = contentElement.getAttribute('href');
+        }
+
         //Changing link text between "Watch" and "Register" based on date.
         if (contentElement.classList.contains('link-to-webinar') && date.getTime() >= tempDate.getTime()) {
           contentElement.textContent = 'Watch';
@@ -227,7 +231,7 @@ calendarBox.addEventListener('click', e => {
       allCardsOnSidePanel.forEach(sidePanelCard => {
         sidePanelCard.remove();
       });
-      cardBuilder(card.header, card.title, card.date, card.time);
+      cardBuilder(card.header, card.title, card.date, card.time, card.link);
     }
   });
 });
@@ -254,7 +258,7 @@ cardControls.forEach(element => {
 //------------------------------FUNCTIONS------------------------------------
 
 //--------------------------Event info section-------------------------------
-function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
+function cardBuilder(cardHeader, cardTitle, cardDate, cardTime, cardLink) {
   const webinarInfoCard = document.createElement('div');
   webinarInfoCard.className = 'side-info-card';
   //Creating Header in "side info card".
@@ -281,6 +285,14 @@ function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
   webinarTime.className = 'time';
   webinarTime.textContent = cardTime;
 
+  const webinarLink = document.createElement('a');
+  webinarLink.href = cardLink;
+  webinarLink.className = 'registration-link';
+  const webinarLinkImg = document.createElement('img');
+  webinarLinkImg.src = "./Assets/sign-up.svg";
+
+  webinarLink.append(webinarLinkImg);
+
   if (cardHeader === 'Finance & Operations') {
     webinarInfoCardHeader.classList.add('finance-and-operations');
     webinarInfoCardContent.classList.add('finance-and-operations-border');
@@ -289,11 +301,13 @@ function cardBuilder(cardHeader, cardTitle, cardDate, cardTime) {
     webinarInfoCardContent.classList.add('business-central-border');
   }
 
-  webinarInfoCardContent.append(webinarTitle, webinarDate, webinarTime);
+  webinarInfoCardContent.append(webinarTitle, webinarDate, webinarTime, webinarLink);
 
   webinarInfoCard.append(webinarInfoCardHeader, webinarInfoCardContent);
 
   quickEventInfoSection.appendChild(webinarInfoCard);
+
+  console.log(cardLink);
 }
 
 function renderFirstFewCards(numberOfCardsToRender) {
