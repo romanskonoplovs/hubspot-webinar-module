@@ -104,6 +104,12 @@ body {
   border-radius: 4px;
   /* box-shadow: 10px 10px 14px 1px rgba(00,00,00,0.2); */
   box-shadow: 2px 2px 8px 1px rgba(00,00,00,0.2);
+  transition: all 0.2s ease-in-out;
+}
+
+.webinar-card:hover {
+  box-shadow: 3px 3px 11px 4px rgba(00,00,00,0.2);
+  transform: translateY(-4px);
 }
 /* ---------------------------------------------------------- */
 /* ========================================================== */
@@ -484,11 +490,46 @@ a.registration-link > img:hover {
   }
 }
 
+@keyframes opacity {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes appear {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
 /* -------------Media Queries------------- */
 @media screen and (max-width: 1025px) {
   .webinar-card {
     
   }
+  
   .quick-calendar-info-container {
     margin: 2rem auto;
   }
